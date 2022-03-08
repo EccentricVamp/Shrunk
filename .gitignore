@@ -1,4 +1,7 @@
-# gradle
+# Gradle
 .gradle
 build
 repo
+
+# VS Code
+.vscode
