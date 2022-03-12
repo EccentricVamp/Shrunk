@@ -17,6 +17,9 @@ public class Network {
             .networkProtocolVersion(() -> networkVersion)
             .simpleChannel();
 
+        network.registerMessage(0, ShrunkMessage.class, ShrunkMessage::encode, ShrunkMessage::decode, ShrunkMessage::handle);
+        network.registerMessage(1, UnshrunkMessage.class, UnshrunkMessage::encode, UnshrunkMessage::decode, UnshrunkMessage::handle);
+
         return network;
     }
 }
