@@ -2,6 +2,7 @@
 .gradle
 build
 bin
+run
 
 # VS Code
 .vscode
