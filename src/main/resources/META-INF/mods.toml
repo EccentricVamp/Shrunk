@@ -29,3 +29,9 @@ Why is this mandatory?
     versionRange="[1.18.1,1.19)"
     ordering="NONE"
     side="BOTH"
+[[dependencies.shrunk]]
+    modId="pehkui"
+    mandatory=true
+    versionRange="3.1.0"
+    ordering="NONE"
+    side="BOTH"
