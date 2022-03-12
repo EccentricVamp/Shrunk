@@ -77,21 +77,15 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
-    maven { url = "https://maven.theillusivec4.top/" }
+    maven { url = "https://jitpack.io" }
 }
 
 dependencies {
     minecraft "net.minecraftforge:forge:${version_forge}"
 
-    annotationProcessor "org.spongepowered:mixin:${version_mixin}:processor"
+    compileOnly fg.deobf("com.github.Virtuoel:Pehkui:${version_pehkui}")
 
-    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${version_curios}:api")
-    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${version_curios}")
-    
-    // Real mod deobf dependency examples - these get remapped to your current mappings
-    // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency
-    // runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}") // Adds the full JEI mod as a runtime dependency
-    // implementation fg.deobf("com.tterrag.registrate:Registrate:MC${mc_version}-${registrate_version}") // Adds registrate as a dependency
+    runtimeOnly fg.deobf("com.github.Virtuoel:Pehkui:${version_pehkui}")
 }
 
 jar {
