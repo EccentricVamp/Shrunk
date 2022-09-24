@@ -1,13 +1,13 @@
 package website.eccentric.shrunk;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.mojang.blaze3d.platform.InputConstants;
+
 import net.minecraft.client.KeyMapping;
 import net.minecraftforge.client.ClientRegistry;
+import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -21,42 +21,39 @@ import website.eccentric.shrunk.network.UnshrunkMessage;
 
 @Mod(Shrunk.ID)
 public class Shrunk {
-    private final Map<String, KeyMapping> keyMappings = new HashMap<String, KeyMapping>();
-
-	public static final String ID = "shrunk";
+    public static final String ID = "shrunk";
     public static final Logger LOGGER = LogManager.getLogger(ID);
-	
+
+    public static final KeyMapping KEY_SHRUNK = new KeyMapping("key." + ID + ".shrunk.desc", KeyConflictContext.IN_GAME,
+            InputConstants.UNKNOWN, "key." + ID + ".category");
+    public static final KeyMapping KEY_UNSHRUNK = new KeyMapping("key." + ID + ".unshrunk.desc",
+            KeyConflictContext.IN_GAME, InputConstants.UNKNOWN, "key." + ID + ".category");
+
     public static SimpleChannel CHANNEL;
 
-	public Shrunk() {
-        var bus = FMLJavaModLoadingContext.get().getModEventBus();
-        bus.addListener(this::onCommonSetup);
-        bus.addListener(this::onClientSetup);
+    public Shrunk() {
+        var modEvent = FMLJavaModLoadingContext.get().getModEventBus();
+        modEvent.addListener(this::onCommonSetup);
+        modEvent.addListener(this::onClientSetup);
 
         MinecraftForge.EVENT_BUS.addListener(this::onClientTick);
-	}
+    }
 
     private void onCommonSetup(final FMLCommonSetupEvent event) {
         CHANNEL = Channel.register();
     }
 
     private void onClientSetup(final FMLClientSetupEvent event) {
-        var shrunk = new KeyMapping("key." + ID + ".shrunk.desc", -1, "key." + ID + ".category");
-        var unshrunk = new KeyMapping("key." + ID + ".unshrunk.desc", -1, "key." + ID + ".category");
-
-        keyMappings.put("shrunk", shrunk);
-        keyMappings.put("unshrunk", unshrunk);
-
-        ClientRegistry.registerKeyBinding(shrunk);
-        ClientRegistry.registerKeyBinding(unshrunk);
+        ClientRegistry.registerKeyBinding(KEY_SHRUNK);
+        ClientRegistry.registerKeyBinding(KEY_UNSHRUNK);
     }
 
     private void onClientTick(ClientTickEvent event) {
-        if (this.keyMappings.get("shrunk").consumeClick()) {
+        if (KEY_SHRUNK.isDown()) {
             CHANNEL.sendToServer(new ShrunkMessage());
         }
 
-        if (this.keyMappings.get("unshrunk").consumeClick()) {
+        if (KEY_UNSHRUNK.isDown()) {
             CHANNEL.sendToServer(new UnshrunkMessage());
         }
     }
