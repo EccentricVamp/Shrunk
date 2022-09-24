@@ -1,109 +1,87 @@
-buildscript {
-    repositories {
-        maven { url = 'https://maven.minecraftforge.net' }
-        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
-        mavenCentral()
-    }
-    dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-        classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7.+'
+plugins {
+    id 'eclipse'
+    id 'net.minecraftforge.gradle' version '5.1.+'
+    id 'com.matthewprenger.cursegradle' version '1.4.0'
+    id 'org.spongepowered.mixin' version '0.7-SNAPSHOT'
+    id 'com.modrinth.minotaur' version '2.+'
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of java_version
+
+version = "${minecraft_version}-${mod_version}"
+group = mod_group
+archivesBaseName = mod_id
+
+// def mixinProperties = [
+//     'mixin.env.remapRefMap'        : 'true',
+//     'mixin.env.refMapRemappingFile': file('build/createSrgToMcp/output.srg')
+// ]
+
+def baseMods = {
+    "${mod_id}" {
+        source sourceSets.main
     }
 }
 
-apply plugin: 'eclipse'
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'org.spongepowered.mixin'
-
-version = "${mod_version}"
-group = "${mod_group}"
-archivesBaseName = "${mod_id}"
-
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
-
 minecraft {
-    mappings channel: 'official', version: "${version_mc}"
-    
+    mappings channel: 'official', version: minecraft_version
     runs {
         client {
-            workingDirectory project.file('run')
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-            property 'forge.enabledGameTestNamespaces', "${mod_id}"
-            mods {
-                shrunk {
-                    source sourceSets.main
-                }
-            }
+            taskName "Client"
+            workingDirectory file('run')
+            // properties mixinProperties
+            mods baseMods
         }
 
         server {
-            workingDirectory project.file('run')
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-            property 'forge.enabledGameTestNamespaces', "${mod_id}"
-            mods {
-                shrunk {
-                    source sourceSets.main
-                }
-            }
-        }
-        
-        gameTestServer {
-            workingDirectory project.file('run')
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-            property 'forge.enabledGameTestNamespaces', "${mod_id}"
-            mods {
-                shrunk {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        data {
-            workingDirectory project.file('run')
-            property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'debug'
-            args '--mod', "${mod_id}", '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-            mods {
-                shrunk {
-                    source sourceSets.main
-                }
-            }
+            taskName "Server"
+            workingDirectory file('run')
+            // properties mixinProperties
+            mods baseMods
         }
     }
 }
 
-sourceSets.main.resources { srcDir 'src/generated/resources' }
-
 repositories {
-    maven { url = "https://jitpack.io" }
+    maven {
+        name 'JitPack'
+        url 'https://jitpack.io'
+    }
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${version_forge}"
-
-    compileOnly fg.deobf("com.github.Virtuoel:Pehkui:${version_pehkui}")
-
-    runtimeOnly fg.deobf("com.github.Virtuoel:Pehkui:${version_pehkui}")
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    implementation fg.deobf("com.github.Virtuoel:Pehkui:${pehkui_version}-${minecraft_version}-forge")
 }
 
-jar {
-    manifest {
-        attributes([
-            "Specification-Title"     : "${mod_id}",
-            "Specification-Vendor"    : "${mod_author}",
-            "Specification-Version"   : "1",
-            "Implementation-Title"    : project.name,
-            "Implementation-Version"  : project.jar.archiveVersion,
-            "Implementation-Vendor"   : "${mod_author}",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-        ])
+jar.manifest.attributes = [
+    'Specification-Title'     : mod_id,
+    'Specification-Vendor'    : mod_author,
+    'Specification-Version'   : '1',
+    'Implementation-Title'    : project.name,
+    'Implementation-Version'  : mod_version,
+    'Implementation-Vendor'   : mod_author,
+    'Implementation-Timestamp': new Date().format('yyyy-MM-dd\'T\'HH:mm:ssZ'),
+]
+
+jar.finalizedBy 'reobfJar'
+
+curseforge {
+    apiKey = System.getenv().CURSEFORGE_KEY ?: 'none'
+    project {
+        id = curseforge_project_id
+        releaseType = curseforge_release_type
+        addGameVersion 'Forge'
+        addGameVersion minecraft_version
+        addGameVersion "Java ${java_version}"
+        mainArtifact jar
     }
 }
 
-jar.finalizedBy('reobfJar')
-
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8'
+modrinth {
+    token = System.getenv().MODRINTH_TOKEN ?: 'none'
+    projectId = modrinth_project_id
+    versionType = modrinth_release_type
+    gameVersions = [minecraft_version]
+    uploadFile = jar
 }
