@@ -21,13 +21,12 @@ import website.eccentric.shrunk.network.UnshrunkMessage;
 
 @Mod(Shrunk.ID)
 public class Shrunk {
+    private final Map<String, KeyMapping> keyMappings = new HashMap<String, KeyMapping>();
 
 	public static final String ID = "shrunk";
     public static final Logger LOGGER = LogManager.getLogger(ID);
 	
     public static SimpleChannel CHANNEL;
-
-    private final Map<String, KeyMapping> keyMappings = new HashMap<String, KeyMapping>();
 
 	public Shrunk() {
         var bus = FMLJavaModLoadingContext.get().getModEventBus();
