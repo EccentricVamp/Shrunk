@@ -7,8 +7,8 @@ import website.eccentric.shrunk.Shrunk;
 
 public class Network {
     
-    public static final ResourceLocation channelName = new ResourceLocation(Shrunk.MOD_ID, "network");
-    public static final String networkVersion = new ResourceLocation(Shrunk.MOD_ID, "1").toString();
+    public static final ResourceLocation channelName = new ResourceLocation(Shrunk.ID, "network");
+    public static final String networkVersion = new ResourceLocation(Shrunk.ID, "1").toString();
 
     public static SimpleChannel register() {
         final var network = NetworkRegistry.ChannelBuilder.named(channelName)

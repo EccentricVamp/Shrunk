@@ -19,11 +19,11 @@ import website.eccentric.shrunk.network.Network;
 import website.eccentric.shrunk.network.ShrunkMessage;
 import website.eccentric.shrunk.network.UnshrunkMessage;
 
-@Mod(Shrunk.MOD_ID)
+@Mod(Shrunk.ID)
 public class Shrunk {
 
-	public static final String MOD_ID = "shrunk";
-    public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
+	public static final String ID = "shrunk";
+    public static final Logger LOGGER = LogManager.getLogger(ID);
 	
     public static SimpleChannel NETWORK;
 
@@ -42,8 +42,8 @@ public class Shrunk {
     }
 
     private void onClientSetup(final FMLClientSetupEvent event) {
-        var shrunk = new KeyMapping("key." + MOD_ID + ".shrunk.desc", -1, "key." + MOD_ID + ".category");
-        var unshrunk = new KeyMapping("key." + MOD_ID + ".unshrunk.desc", -1, "key." + MOD_ID + ".category");
+        var shrunk = new KeyMapping("key." + ID + ".shrunk.desc", -1, "key." + ID + ".category");
+        var unshrunk = new KeyMapping("key." + ID + ".unshrunk.desc", -1, "key." + ID + ".category");
 
         keyMappings.put("shrunk", shrunk);
         keyMappings.put("unshrunk", unshrunk);
