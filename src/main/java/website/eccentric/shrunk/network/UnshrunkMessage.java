@@ -6,7 +6,6 @@ import net.minecraftforge.network.NetworkEvent;
 import java.util.function.Supplier;
 
 public class UnshrunkMessage {
-
     public static UnshrunkMessage decode(final FriendlyByteBuf buffer) {
         buffer.readByte();
         return new UnshrunkMessage();
@@ -17,15 +16,13 @@ public class UnshrunkMessage {
     }
 
     public static void handle(final UnshrunkMessage message, final Supplier<NetworkEvent.Context> context) {
-        context.get().enqueueWork(
-            ()-> {
-                var player = context.get().getSender();
-                var server = player.getServer();
-                var source = server.createCommandSourceStack();
+        context.get().enqueueWork(() -> {
+            var player = context.get().getSender();
+            var server = player.getServer();
+            var source = server.createCommandSourceStack();
 
-                server.getCommands().performCommand(source, "scale reset " + player.getGameProfile().getName());
-            }
-        );
+            server.getCommands().performCommand(source, "scale reset " + player.getGameProfile().getName());
+        });
 
         context.get().setPacketHandled(true);
     }
