@@ -5,7 +5,7 @@ import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 import website.eccentric.shrunk.Shrunk;
 
-public class Network {
+public class Channel {
     
     public static final ResourceLocation channelName = new ResourceLocation(Shrunk.ID, "network");
     public static final String networkVersion = new ResourceLocation(Shrunk.ID, "1").toString();

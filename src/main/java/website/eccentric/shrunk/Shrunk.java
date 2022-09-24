@@ -15,7 +15,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.network.simple.SimpleChannel;
-import website.eccentric.shrunk.network.Network;
+import website.eccentric.shrunk.network.Channel;
 import website.eccentric.shrunk.network.ShrunkMessage;
 import website.eccentric.shrunk.network.UnshrunkMessage;
 
@@ -25,7 +25,7 @@ public class Shrunk {
 	public static final String ID = "shrunk";
     public static final Logger LOGGER = LogManager.getLogger(ID);
 	
-    public static SimpleChannel NETWORK;
+    public static SimpleChannel CHANNEL;
 
     private final Map<String, KeyMapping> keyMappings = new HashMap<String, KeyMapping>();
 
@@ -38,7 +38,7 @@ public class Shrunk {
 	}
 
     private void onCommonSetup(final FMLCommonSetupEvent event) {
-        NETWORK = Network.register();
+        CHANNEL = Channel.register();
     }
 
     private void onClientSetup(final FMLClientSetupEvent event) {
@@ -54,11 +54,11 @@ public class Shrunk {
 
     private void onClientTick(ClientTickEvent event) {
         if (this.keyMappings.get("shrunk").consumeClick()) {
-            NETWORK.sendToServer(new ShrunkMessage());
+            CHANNEL.sendToServer(new ShrunkMessage());
         }
 
         if (this.keyMappings.get("unshrunk").consumeClick()) {
-            NETWORK.sendToServer(new UnshrunkMessage());
+            CHANNEL.sendToServer(new UnshrunkMessage());
         }
     }
 }
