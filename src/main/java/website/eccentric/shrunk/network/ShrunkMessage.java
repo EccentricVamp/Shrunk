@@ -18,7 +18,13 @@ public class ShrunkMessage {
     public static void handle(final ShrunkMessage message, final Supplier<NetworkEvent.Context> context) {
         context.get().enqueueWork(() -> {
             var player = context.get().getSender();
+            if (player == null)
+                return;
+
             var server = player.getServer();
+            if (server == null)
+                return;
+
             var source = server.createCommandSourceStack();
 
             server.getCommands().performCommand(source, "scale set 0.2 " + player.getGameProfile().getName());
