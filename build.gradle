@@ -9,12 +9,6 @@ archivesBaseName = project.mod_id
 version = "${project.minecraft_version}-${project.mod_version}"
 group = project.mod_group
 
-def baseMods = {
-    "${mod_id}" {
-        source sourceSets.main
-    }
-}
-
 loom {
     silentMojangMappingsLicense()
 }
