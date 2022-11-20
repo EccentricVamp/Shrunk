@@ -1,45 +1,16 @@
 plugins {
-    id 'eclipse'
-    id 'net.minecraftforge.gradle' version '5.1.+'
-    id 'com.matthewprenger.cursegradle' version '1.4.0'
-    id 'org.spongepowered.mixin' version '0.7-SNAPSHOT'
+    id 'dev.architectury.loom' version '0.12.0-SNAPSHOT'
     id 'com.modrinth.minotaur' version '2.+'
 }
 
-java.toolchain.languageVersion = JavaLanguageVersion.of java_version
+sourceCompatibility = targetCompatibility = JavaLanguageVersion.of project.java_version
 
-version = "${minecraft_version}-${mod_version}"
-group = mod_group
-archivesBaseName = mod_id
+archivesBaseName = project.mod_id
+version = "${project.minecraft_version}-${project.mod_version}"
+group = project.mod_group
 
-// def mixinProperties = [
-//     'mixin.env.remapRefMap'        : 'true',
-//     'mixin.env.refMapRemappingFile': file('build/createSrgToMcp/output.srg')
-// ]
-
-def baseMods = {
-    "${mod_id}" {
-        source sourceSets.main
-    }
-}
-
-minecraft {
-    mappings channel: 'official', version: minecraft_version
-    runs {
-        client {
-            taskName "Client"
-            workingDirectory file('run')
-            // properties mixinProperties
-            mods baseMods
-        }
-
-        server {
-            taskName "Server"
-            workingDirectory file('run')
-            // properties mixinProperties
-            mods baseMods
-        }
-    }
+loom {
+    silentMojangMappingsLicense()
 }
 
 repositories {
@@ -50,33 +21,32 @@ repositories {
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-    implementation fg.deobf("com.github.Virtuoel:Pehkui:${pehkui_version}-${minecraft_version}-forge")
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+
+    mappings loom.officialMojangMappings()
+
+    forge "net.minecraftforge:forge:${project.minecraft_version}-${project.forge_version}"
+
+    modImplementation "com.github.Virtuoel:Pehkui:${pehkui_version}-${minecraft_version}-forge"
+}
+
+processResources {
+    inputs.property 'version', project.mod_version
+    
+    filesMatching('META-INF/mods.toml') {
+        expand 'version': project.mod_version
+    }
 }
 
 jar.manifest.attributes = [
-    'Specification-Title'     : mod_id,
-    'Specification-Vendor'    : mod_author,
+    'Specification-Title'     : project.mod_id,
+    'Specification-Vendor'    : project.mod_author,
     'Specification-Version'   : '1',
     'Implementation-Title'    : project.name,
-    'Implementation-Version'  : mod_version,
-    'Implementation-Vendor'   : mod_author,
+    'Implementation-Version'  : project.mod_version,
+    'Implementation-Vendor'   : project.mod_author,
     'Implementation-Timestamp': new Date().format('yyyy-MM-dd\'T\'HH:mm:ssZ'),
 ]
-
-jar.finalizedBy 'reobfJar'
-
-curseforge {
-    apiKey = System.getenv().CURSEFORGE_KEY ?: 'none'
-    project {
-        id = curseforge_project_id
-        releaseType = curseforge_release_type
-        addGameVersion 'Forge'
-        addGameVersion minecraft_version
-        addGameVersion "Java ${java_version}"
-        mainArtifact jar
-    }
-}
 
 modrinth {
     token = System.getenv().MODRINTH_TOKEN ?: 'none'
