@@ -27,7 +27,7 @@ public class ShrunkMessage {
 
             var source = server.createCommandSourceStack();
 
-            server.getCommands().performCommand(source, "scale set 0.2 " + player.getGameProfile().getName());
+            server.getCommands().performPrefixedCommand(source, "scale set 0.2 " + player.getGameProfile().getName());
         });
 
         context.get().setPacketHandled(true);

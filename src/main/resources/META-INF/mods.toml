@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[40,)"
+loaderVersion = "[43,)"
 license = "MIT"
 issueTrackerURL = "https://github.com/EccentricVamp/Shrunk/issues"
 
@@ -14,7 +14,7 @@ description = '''Honey, I shrunk the player'''
 [[dependencies.shrunk]]
 modId = "forge"
 mandatory = true
-versionRange = "[40.1.0,)"
+versionRange = "[43.1.7,)"
 ordering = "NONE"
 side = "BOTH"
 

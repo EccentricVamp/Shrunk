@@ -6,12 +6,11 @@ import org.apache.logging.log4j.Logger;
 import com.mojang.blaze3d.platform.InputConstants;
 
 import net.minecraft.client.KeyMapping;
-import net.minecraftforge.client.ClientRegistry;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.network.simple.SimpleChannel;
@@ -41,7 +40,7 @@ public class Shrunk {
     public Shrunk() {
         var modEvent = FMLJavaModLoadingContext.get().getModEventBus();
         modEvent.addListener(this::onCommonSetup);
-        modEvent.addListener(this::onClientSetup);
+        modEvent.addListener(this::onRegisterKeyMappings);
 
         MinecraftForge.EVENT_BUS.addListener(this::onClientTick);
     }
@@ -50,9 +49,9 @@ public class Shrunk {
         CHANNEL = Channel.register();
     }
 
-    private void onClientSetup(final FMLClientSetupEvent event) {
-        ClientRegistry.registerKeyBinding(KEY_SHRUNK);
-        ClientRegistry.registerKeyBinding(KEY_UNSHRUNK);
+    private void onRegisterKeyMappings(RegisterKeyMappingsEvent keyMapping) {
+        keyMapping.register(KEY_SHRUNK);
+        keyMapping.register(KEY_UNSHRUNK);
     }
 
     private void onClientTick(ClientTickEvent event) {

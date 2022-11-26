@@ -27,7 +27,7 @@ public class UnshrunkMessage {
 
             var source = server.createCommandSourceStack();
 
-            server.getCommands().performCommand(source, "scale reset " + player.getGameProfile().getName());
+            server.getCommands().performPrefixedCommand(source, "scale reset " + player.getGameProfile().getName());
         });
 
         context.get().setPacketHandled(true);
