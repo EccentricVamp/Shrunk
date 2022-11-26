@@ -6,7 +6,7 @@ plugins {
 sourceCompatibility = targetCompatibility = JavaLanguageVersion.of project.java_version
 
 archivesBaseName = project.mod_id
-version = "${project.minecraft_version}-${project.mod_version}"
+version = project.mod_version
 group = project.mod_group
 
 loom {
