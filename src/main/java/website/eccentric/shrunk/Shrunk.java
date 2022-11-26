@@ -24,10 +24,17 @@ public class Shrunk {
     public static final String ID = "shrunk";
     public static final Logger LOGGER = LogManager.getLogger(ID);
 
-    public static final KeyMapping KEY_SHRUNK = new KeyMapping("key." + ID + ".shrunk.desc", KeyConflictContext.IN_GAME,
-            InputConstants.UNKNOWN, "key." + ID + ".category");
-    public static final KeyMapping KEY_UNSHRUNK = new KeyMapping("key." + ID + ".unshrunk.desc",
-            KeyConflictContext.IN_GAME, InputConstants.UNKNOWN, "key." + ID + ".category");
+    public static final KeyMapping KEY_SHRUNK = new KeyMapping(
+            "key." + ID + ".shrunk.desc",
+            KeyConflictContext.IN_GAME,
+            InputConstants.UNKNOWN,
+            "key." + ID + ".category");
+
+    public static final KeyMapping KEY_UNSHRUNK = new KeyMapping(
+            "key." + ID + ".unshrunk.desc",
+            KeyConflictContext.IN_GAME,
+            InputConstants.UNKNOWN,
+            "key." + ID + ".category");
 
     public static SimpleChannel CHANNEL;
 
