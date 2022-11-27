@@ -6,7 +6,7 @@ plugins {
 sourceCompatibility = targetCompatibility = JavaLanguageVersion.of project.java_version
 
 archivesBaseName = project.mod_id
-version = project.mod_version
+version = "${project.minecraft_version}-${project.mod_version}"
 group = project.mod_group
 
 loom {
@@ -47,9 +47,14 @@ jar.manifest.attributes = [
 
 modrinth {
     token = System.getenv().MODRINTH_TOKEN ?: 'none'
-    projectId = modrinth_project_id
-    versionType = modrinth_release_type
-    gameVersions = [minecraft_version]
+    projectId = project.modrinth_project_id
+    versionName = project.mod_version
+    versionNumber = project.version
+    versionType = project.modrinth_version_type
+    uploadFile = remapJar
+    gameVersions = [project.minecraft_version]
     loaders = ['forge']
-    uploadFile = jar
+    dependencies {
+        required.project 'pehkui'
+    }
 }
