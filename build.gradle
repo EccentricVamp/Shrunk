@@ -50,5 +50,6 @@ modrinth {
     projectId = modrinth_project_id
     versionType = modrinth_release_type
     gameVersions = [minecraft_version]
+    loaders = ['forge']
     uploadFile = jar
 }
