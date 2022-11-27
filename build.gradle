@@ -4,14 +4,11 @@ plugins {
 }
 
 sourceCompatibility = targetCompatibility = JavaLanguageVersion.of project.java_version
-
 archivesBaseName = project.mod_id
 version = "${project.minecraft_version}-${project.mod_version}"
 group = project.mod_group
 
-loom {
-    silentMojangMappingsLicense()
-}
+loom.silentMojangMappingsLicense()
 
 repositories {
     maven {
@@ -22,17 +19,15 @@ repositories {
 
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
-
     mappings loom.officialMojangMappings()
-
     forge "net.minecraftforge:forge:${project.minecraft_version}-${project.forge_version}"
-
-    modImplementation "com.github.Virtuoel:Pehkui:${pehkui_version}-${minecraft_version}-forge"
+    modApi "com.github.Virtuoel:Pehkui:${project.pehkui_version}-${project.minecraft_version}-forge"
 }
 
 processResources {
-    include 'META-INF/mods.toml'
-    expand project.properties
+    filesMatching('META-INF/mods.toml') {
+        expand project.properties
+    }
 }
 
 jar.manifest.attributes = [
@@ -49,7 +44,6 @@ modrinth {
     token = System.getenv().MODRINTH_TOKEN ?: 'none'
     projectId = project.modrinth_project_id
     versionName = project.mod_version
-    versionNumber = project.version
     versionType = project.modrinth_version_type
     uploadFile = remapJar
     gameVersions = [project.minecraft_version]
